@@ -38,10 +38,10 @@ def DBSCANCLU(agents, eps_param, absr, center, d_range, point, learn, nodes_dim=
 def euclidean_distance(point1, point2):
     return np.sqrt(np.sum((point1 - point2) ** 2))
 
-def region_query(data, point_idx, eps):
+def region_query(data, point_idx, eps, labels, cluster_id):
     neighbors = []
     for i in range(len(data)):
-        if (euclidean_distance(data[point_idx], data[i]) <= eps):
+        if (euclidean_distance(data[point_idx], data[i]) <= eps and (labels[i] == 0 or labels[i] == cluster_id)):
             neighbors.append(i)
     return neighbors
 
@@ -68,9 +68,9 @@ def check_region(maxregion, node1, absr):
 
 def expand_cluster(data, labels, point_idx, cluster_id, eps, min_pts, clusteri, maxeps, absr):
     maxregion = max_region(clusteri)
-    neighbors = region_query(data, point_idx, eps)
+    neighbors = region_query(data, point_idx, eps, labels, cluster_id)
     if len(neighbors) < min_pts:
-        labels[point_idx] = -1
+        labels[point_idx] = -1  #noise
         return False
     else:
         if len(clusteri) > 0:
@@ -98,7 +98,7 @@ def expand_cluster(data, labels, point_idx, cluster_id, eps, min_pts, clusteri, 
                 labels[neighbor_idx] = cluster_id
                 clusteri.append(data[neighbor_idx])
                 maxregion = max_region(clusteri)
-                new_neighbors = region_query(data, neighbor_idx, eps)
+                new_neighbors = region_query(data, neighbor_idx, eps, labels, cluster_id)
                 if len(new_neighbors) >= min_pts:
                     neighbors += new_neighbors
             i += 1
