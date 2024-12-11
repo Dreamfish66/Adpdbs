@@ -15,9 +15,7 @@ parser.add_argument('-FC', '--Framework_config', type=str, default='./config.jso
                     help='Framework for agents and summarize.')
 parser.add_argument('-anc', '--agents_center', type=int, default=50,
                     help="The number of agents per center .")
-parser.add_argument('-r', "--dbscan_r", type=int, default=5,
-                    help="The distance to cluster center for node in dbscan.")
-parser.add_argument('-R', '--dbscan_diameter', type=int, default=9,
+parser.add_argument('-R', '--dbscan_radius', type=int, default=5,
                     help="The distance to cluster center for node in dbscan.")
 parser.add_argument('-rho', '--dbscan_rho', type=int, default=5,
                     help='The gradient coefficient.')
@@ -73,8 +71,8 @@ dbscan_negative_list_nonadd = []
 dbscan_negative_list_negative = [0]
 dbscan_center = []
 dbscan_range = args.cluster_eps
-dbscan_maxeps = args.dbscan_r
-dbscan_absr = args.dbscan_diameter
+dbscan_maxeps = args.dbscan_radius
+dbscan_absr = dbscan_maxeps * 2
 dbscan_learn = args.cluster_learnrate
 dbscan_point = args.dbscan_rho
 
